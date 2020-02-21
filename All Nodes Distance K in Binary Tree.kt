@@ -6,11 +6,9 @@
  * }
  */
 class Solution {
-    
-    val graph = mutableMapOf<Int, List<Int?>>()
-    
     fun distanceK(root: TreeNode?, target: TreeNode?, K: Int): List<Int> {
-        buildGraph(root)
+        val graph = mutableMapOf<Int, List<Int?>>()
+        buildGraph(graph, root)
 
         val cases = mutableListOf<Int>()
         val visited = mutableListOf<Int>()
@@ -23,20 +21,11 @@ class Solution {
 
         // K가 0인 경우
         if (K == 0) return visited
-        
+
         // 인접한 node 값 추가
-        graph[target.`val`]?.let {
-            for (i in it.indices) {
-                if (it[i] == null) continue
-                cases.add(it[i]!!)
-            }
-        }
-        val topElement = graph.filterValues { value -> value.contains(target.`val`) }.keys
-        if (topElement.isNotEmpty()) {
-            cases.add(topElement.toIntArray()[0])
-        }
+        setupAdjacentNode(graph, target.`val`, cases, visited)
         distance++
-    
+
         // 케이스가 비어있지 않을 때까지 반복
         while (cases.isNotEmpty()) {
             for (i in cases.size - 1 downTo 0) {
@@ -45,16 +34,7 @@ class Solution {
                     cases.remove(cases[i])
                     continue
                 } else { // depth 가 동일하지 않을 경우
-                    graph[cases[i]]?.let {
-                        for (j in it.indices) {
-                            if (it[j] == null || visited.contains(it[j])) continue
-                            cases.add(it[j]!!)
-                        }
-                    }
-                    val topElement = graph.filterValues { value -> value.contains(cases[i]) }.keys
-                    if (topElement.isNotEmpty() && !visited.contains(topElement.toIntArray()[0])) {
-                        cases.add(topElement.toIntArray()[0])
-                    }
+                    setupAdjacentNode(graph, cases[i], cases, visited)
 
                     visited.add(cases[i])
                     cases.remove(cases[i])
@@ -65,12 +45,30 @@ class Solution {
 
         return result
     }
-    
-    fun buildGraph(parent: TreeNode?) {
+
+    private fun setupAdjacentNode(
+        graph: MutableMap<Int, List<Int?>>,
+        targetValue: Int,
+        cases: MutableList<Int>,
+        visited: MutableList<Int>
+    ) {
+        graph[targetValue]?.let {
+            for (j in it.indices) {
+                if (it[j] == null || visited.contains(it[j])) continue
+                cases.add(it[j]!!)
+            }
+        }
+        val topElement = graph.filterValues { value -> value.contains(targetValue) }.keys
+        if (topElement.isNotEmpty() && !visited.contains(topElement.toIntArray()[0])) {
+            cases.add(topElement.toIntArray()[0])
+        }
+    }
+
+    private fun buildGraph(graph: MutableMap<Int, List<Int?>>, parent: TreeNode?) {
         if (parent == null) return
 
         graph[parent.`val`] = listOf(parent.left?.`val`, parent.right?.`val`)
-        if (parent.left != null) buildGraph(parent.left)
-        if (parent.right != null) buildGraph(parent.right)
+        if (parent.left != null) buildGraph(graph, parent.left)
+        if (parent.right != null) buildGraph(graph, parent.right)
     }
 }
