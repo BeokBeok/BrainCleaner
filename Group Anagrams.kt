@@ -16,4 +16,9 @@ class Solution {
         }
         return map.values.toList()
     }
+    
+    // 더 좋은 문제 풀이
+    fun advancedGroupAnagrams(strs: Array<String>): List<List<String>> =
+        strs.groupBy { it.toList().sorted() }
+            .map { it.value }
 }
