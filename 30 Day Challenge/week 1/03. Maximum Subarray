@@ -1,0 +1,14 @@
+class Solution {
+    fun maxSubArray(nums: IntArray): Int {
+        var result = nums[0]
+        for (i in nums.indices) {
+            var (max, sum) = nums[i] to nums[i]
+            for (j in i + 1 until nums.size) {
+                sum += nums[j]
+                max = max.coerceAtLeast(sum)
+            }
+            result = result.coerceAtLeast(max)
+        }
+        return result
+    }
+}
