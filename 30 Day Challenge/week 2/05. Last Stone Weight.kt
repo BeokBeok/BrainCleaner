@@ -1,21 +1,19 @@
+import java.util.PriorityQueue
+import kotlin.Comparator
+
 class Solution {
     fun lastStoneWeight(stones: IntArray): Int {
-        if (stones.isEmpty()) return 0
-        if (stones.size == 1) return stones[0]
-
-        val stoneList = stones.toMutableList()
-
-        while (stoneList.size > 1) {
-            val firstMax = stoneList.max() ?: 0
-            stoneList.remove(firstMax)
-            val secondMax = stoneList.max() ?: 0
-            stoneList.remove(secondMax)
-
-            if (firstMax != secondMax) {
-                stoneList.add(firstMax - secondMax)
+        val priorityQueue = PriorityQueue(
+            Comparator { a: Int, b: Int ->
+                b - a
             }
+        )
+        for (element in stones) {
+            priorityQueue.add(element)
         }
-
-        return if (stoneList.isEmpty()) 0 else stoneList[0]
+        while (priorityQueue.size > 1) {
+            priorityQueue.offer(priorityQueue.poll() - priorityQueue.poll())
+        }
+        return priorityQueue.first()
     }
 }
