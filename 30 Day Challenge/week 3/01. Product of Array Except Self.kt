@@ -2,22 +2,17 @@ class Solution {
     fun productExceptSelf(nums: IntArray): IntArray {
         if (nums.isEmpty()) return nums
 
-        val zeroCnt = nums.count { it == 0 }
-        if (zeroCnt > 1) return IntArray(nums.size)
-
-        val multiple = nums.filter { it != 0 }.reduce { acc, i -> acc.times(i) }
-
-        for (i in nums.indices) {
-            if (nums[i] == 0) {
-                nums[i] = multiple
-                continue
-            }
-            if (nums.contains(0)){
-                nums[i] = 0
-            } else {
-                nums[i] = multiple.div(nums[i])
-            }
+        val result = IntArray(nums.size)
+        result[0] = 1
+        for (i in 1 until nums.size) {
+            result[i] = result[i - 1] * nums[i - 1]
         }
-        return nums
+
+        var right = 1
+        for (i in nums.size - 1 downTo 0) {
+            result[i] = result[i] * right
+            right *= nums[i]
+        }
+        return result
     }
 }
