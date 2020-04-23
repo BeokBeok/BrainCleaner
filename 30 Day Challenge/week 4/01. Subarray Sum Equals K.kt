@@ -1,21 +1,16 @@
 class Solution {
     fun subarraySum(nums: IntArray, k: Int): Int {
-        if (nums.size == 1 && k == nums[0]) return 1
-
         var (sum, count) = 0 to 0
-        for (i in nums.indices) {
-            sum = nums[i]
-            if (sum == k) {
-                count++
-            }
-            for (j in i + 1..nums.lastIndex) {
-                sum += nums[j]
-                if (sum == k) {
-                    count++
-                }
-            }
-        }
+        val sumToCnt = HashMap<Int, Int>()
+        sumToCnt[0] = 1
 
+        for (i in nums.indices) {
+            sum += nums[i]
+            if (sumToCnt.containsKey(sum - k)) {
+                count += sumToCnt[sum - k]!!
+            }
+            sumToCnt[sum] = sumToCnt.getOrDefault(sum, 0) + 1
+        }
         return count
     }
 }
