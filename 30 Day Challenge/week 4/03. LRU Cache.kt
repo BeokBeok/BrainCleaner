@@ -13,14 +13,14 @@ class LRUCache(capacity: Int) {
     }
 
     fun put(key: Int, value: Int) {
-        var duplicatedElement: Map<Int, Int>? = null
-        for (element in lruList) {
-           if (element.containsKey(key)) {
-               duplicatedElement = element
-           }
+        var containsKeyIndex = -1
+        for (i in lruList.indices) {
+            if (lruList[i].containsKey(key)) {
+                containsKeyIndex = i
+            }
         }
-        if (duplicatedElement != null) {
-            lruList.remove(duplicatedElement)
+        if (containsKeyIndex > -1 ) {
+            lruList.removeAt(containsKeyIndex)
         }
         lruList.add(0, mapOf(key to value))
         if (lruList.size > capacity) {
