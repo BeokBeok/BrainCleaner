@@ -13,5 +13,5 @@ class Solution: VersionControl() {
             }
         }
         return left
-	}
+    }
 }
