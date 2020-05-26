@@ -15,7 +15,8 @@ class Solution {
             if (map[key]?.size != N - 1) continue
 
             for (i in map[key]!!.indices) {
-                if (map.containsKey(map[key]!![i]) && map[map[key]!![i]]!!.contains(key)) {
+                val targetKey = map[key]!![i]
+                if (map.containsKey(targetKey) && map[targetKey]!!.contains(key)) {
                     return -1
                 }
             }
