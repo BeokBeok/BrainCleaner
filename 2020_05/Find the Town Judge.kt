@@ -1,27 +1,13 @@
 class Solution {
     fun findJudge(N: Int, trust: Array<IntArray>): Int {
-        if (N == 1 && trust.isEmpty()) return 1
-        
-        val map = HashMap<Int, MutableList<Int>>()
+        val count = IntArray(N + 1)
         for (element in trust) {
-            map.computeIfAbsent(element[1]) { mutableListOf() }
-            if (map.containsKey(element[1])) {
-                map[element[1]]?.add(element[0])
-            }
+            count[element[0]]--
+            count[element[1]]++
         }
-
-        var result = -1
-        for (key in map.keys) {
-            if (map[key]?.size != N - 1) continue
-
-            for (i in map[key]!!.indices) {
-                val targetKey = map[key]!![i]
-                if (map.containsKey(targetKey) && map[targetKey]!!.contains(key)) {
-                    return -1
-                }
-            }
-            result = key
+        for (i in 1..N) {
+            if (count[i] == N - 1) return i
         }
-        return result
+        return -1
     }
 }
