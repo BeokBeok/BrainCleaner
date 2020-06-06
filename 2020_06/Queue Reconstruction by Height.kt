@@ -1,20 +1,17 @@
 class Solution {
     fun reconstructQueue(people: Array<IntArray>): Array<IntArray> {
-        val sortedPeopleHeightList = people.sortedBy { it[0] }.toMutableList()
-        val result = mutableListOf<IntArray>()
-
-        var (startIndex, remainSize) = 0 to sortedPeopleHeightList.size
-        while (startIndex < remainSize) {
-            for (element in sortedPeopleHeightList) {
-                if (result.count { it[0] >= element[0] } == element[1]) {
-                    result.add(element)
-                    sortedPeopleHeightList.remove(element)
-                    startIndex = 0
-                    break
-                }
+        people.sortWith(Comparator<IntArray> { o1, o2 ->
+            if (o1[0] == o2[0]) {
+                o1[1] - o2[1]
+            } else {
+                o2[0] - o1[0]
             }
-            startIndex ++
-        }
-        return result.toTypedArray()
+        })
+
+        return mutableListOf<IntArray>().apply {
+            for (element in people) {
+                add(element[1], element)
+            }
+        }.toTypedArray()
     }
 }
