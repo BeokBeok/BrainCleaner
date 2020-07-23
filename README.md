@@ -1,1 +1,1 @@
-![BeokBeok's github stats](https://github-readme-stats.vercel.app/api/pin/?username=beokbeok&show_icons=true&repo=BrainCleaner)
+![BeokBeok's github stats](https://github-readme-stats.vercel.app/api/?username=beokbeok&show_icons=true)
